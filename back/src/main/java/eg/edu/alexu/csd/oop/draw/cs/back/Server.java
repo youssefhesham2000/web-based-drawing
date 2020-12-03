@@ -140,7 +140,7 @@ public class Server {
     public ArrayList<Shape> undo() {
 
         if (currentFrame > 0)
-            array = (ArrayList<Shape>) frames.get(--currentFrame).clone();
+            array = frames.get(--currentFrame);
         return array;
     }
 

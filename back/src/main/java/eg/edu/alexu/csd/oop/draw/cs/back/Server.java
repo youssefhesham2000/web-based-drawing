@@ -3,7 +3,6 @@ package eg.edu.alexu.csd.oop.draw.cs.back;
 import java.util.*;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -148,7 +147,7 @@ public class Server {
         return array;
     }
 
-    @GetMapping("/frames") 
+    @PostMapping("/frames") 
     @CrossOrigin ( origins = "*" )
     public String printFrames () {
         String test = "current frame : " + currentFrame + "\n";
@@ -159,10 +158,9 @@ public class Server {
     }
 
     private void newFrame(){
-        if (frames.size() == 0){
+        if (frames.size() == 0)
             frames.add(new ArrayList<Shape>());
-            currentFrame = 1;
-        }
+        
         try{
             if ( currentFrame < frames.size() - 1)
             {

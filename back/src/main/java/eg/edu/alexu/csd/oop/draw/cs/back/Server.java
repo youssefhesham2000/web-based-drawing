@@ -199,28 +199,29 @@ public class Server {
 
     @PostMapping("/savejson")
     @CrossOrigin(origins = "*")
-    public void saveJSON() throws IOException {
-
+    public void saveJSON(@RequestBody Path p) throws IOException {
+        String path = p.getPath();
         Gson GsonStr = new GsonBuilder().setPrettyPrinting().create();
         String JsonStr = GsonStr.toJson(array);
-        Files.write(Paths.get("jsonfile.json"), JsonStr.toString().getBytes());
+        Files.write(Paths.get(path+".json"), JsonStr.toString().getBytes());
 
     }
 
     @PostMapping("/savexml")
     @CrossOrigin(origins = "*")
-    public void saveXML() throws IOException {
+    public void saveXML(@RequestBody Path p) throws IOException {
+        String path = p.getPath();
         XmlMapper xmlMapper = new XmlMapper();
-        PickAFile pick = new PickAFile();
-        File file = pick.getFile();
+        File file = new File(path+".xml");
         xmlMapper.writeValue(file, array);
 
     }
 
     @PostMapping("/loadxml")
     @CrossOrigin(origins = "*")
-    public void loadXML() throws IOException {
-        File file = new File("xmlfile.xml");
+    public void loadXML(@RequestBody Path p) throws IOException {
+        String path = p.getPath();
+        File file = new File(path+".xml");
         XmlMapper xmlMapper = new XmlMapper();
         ArrayList<Shape> arrayload = new ArrayList<Shape>(1000);
         CollectionType listType = xmlMapper.getTypeFactory().constructCollectionType(ArrayList.class, Shape.class);
@@ -230,7 +231,8 @@ public class Server {
 
     @PostMapping("/loadjson")
     @CrossOrigin(origins = "*")
-    public void loadJSON() throws IOException {
+    public void loadJSON(@RequestBody Path p) throws IOException {
+        String path = p.getPath();
         deserializer deserializer = new deserializer("type");
         deserializer.registerBarnType("line", line.class);
         deserializer.registerBarnType("circle", Circle.class);
@@ -239,7 +241,7 @@ public class Server {
         deserializer.registerBarnType("square", square.class);
         deserializer.registerBarnType("triangle", triangle.class);
         Gson gson = new GsonBuilder().registerTypeAdapter(Shape.class, deserializer).create();
-        String input = Files.readString(Paths.get("jsonfile.json"));
+        String input = Files.readString(Paths.get(path+".json"));
         ArrayList<Shape> arrayload = gson.fromJson(input, new TypeToken<ArrayList<Shape>>() {
         }.getType());
         array = arrayload;

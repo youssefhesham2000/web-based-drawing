@@ -417,7 +417,7 @@ function setupCanvas(){
           }
           )
       }
-      backEndSaveJSON(path){
+      backEndSaveXML(path){
       return fetch("http://localhost:8080/savexml",
       {
           
@@ -430,7 +430,7 @@ function setupCanvas(){
       }
       )
   }
-  backEndSaveXML(path){
+  backEndSaveJSON(path){
     return fetch("http://localhost:8080/savejson",
     {
         

@@ -3,10 +3,13 @@ package eg.edu.alexu.csd.oop.draw.cs.back;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
-import javax.*;
-import javax.swing.JFileChooser;
 
-import org.json.*;
+import com.fasterxml.jackson.databind.type.CollectionType;
+
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +26,7 @@ public class Server {
     @PostMapping("/draw")
     @CrossOrigin(origins = "*")
     public void draw(@RequestBody request r) {
-        String type = r.getType();
+        String type = r.get();
         String color = r.getColor();
         int id = r.getId();
         double x1 = r.getX1();
@@ -34,18 +37,18 @@ public class Server {
             case ("line"):
                 double x2 = r.getX2();
                 double y2 = r.getY2();
-                shape = new line(color, type, x1, y1, id, x2, y2);
+                shape = new line(type, color, x1, y1, id, x2, y2);
                 break;
 
             case ("circle"):
                 double r1 = r.getR1();
-                shape = new Circle(color, type, x1, y1, id, r1);
+                shape = new Circle(type, color, x1, y1, id, r1);
                 break;
 
             case ("ellipse"):
                 r1 = r.getR1();
                 double r2 = r.getR2();
-                shape = new ellipse(color, type, x1, y1, id, r1, r2);
+                shape = new ellipse(type, color, x1, y1, id, r1, r2);
                 break;
 
             case ("triangle"):
@@ -53,19 +56,19 @@ public class Server {
                 double x3 = r.getX3();
                 y2 = r.getY2();
                 double y3 = r.getY3();
-                shape = new triangle(color, type, x1, y1, id, x2, x3, y2, y3);
+                shape = new triangle(type, color, x1, y1, id, x2, x3, y2, y3);
                 break;
 
             case ("rectangle"):
                 double w = r.getW();
                 double h = r.getH();
-                shape = new rectangle(color, type, x1, y1, id, w, h);
+                shape = new rectangle(type, color, x1, y1, id, w, h);
                 break;
 
             case ("square"):
                 w = r.getW();
                 h = r.getH();
-                shape = new square(color, type, x1, y1, id, w, h);
+                shape = new square(type, color, x1, y1, id, w, h);
                 break;
         }
 
@@ -76,7 +79,7 @@ public class Server {
     @PostMapping("/edit")
     @CrossOrigin(origins = "*")
     public void edit(@RequestBody request r) {
-        String type = r.getType();
+        String type = r.get();
         String color = r.getColor();
         int id = r.getId();
         double x1 = r.getX1();
@@ -88,18 +91,18 @@ public class Server {
             case ("line"):
                 double x2 = r.getX2();
                 double y2 = r.getY2();
-                shape = new line(color, type, x1, y1, id, x2, y2);
+                shape = new line(type, color, x1, y1, id, x2, y2);
                 break;
 
             case ("circle"):
                 double r1 = r.getR1();
-                shape = new Circle(color, type, x1, y1, id, r1);
+                shape = new Circle(type, color, x1, y1, id, r1);
                 break;
 
             case ("ellipse"):
                 r1 = r.getR1();
                 double r2 = r.getR2();
-                shape = new ellipse(color, type, x1, y1, id, r1, r2);
+                shape = new ellipse(type, color, x1, y1, id, r1, r2);
                 break;
 
             case ("triangle"):
@@ -107,19 +110,19 @@ public class Server {
                 double x3 = r.getX3();
                 y2 = r.getY2();
                 double y3 = r.getY3();
-                shape = new triangle(color, type, x1, y1, id, x2, x3, y2, y3);
+                shape = new triangle(type, color, x1, y1, id, x2, x3, y2, y3);
                 break;
 
             case ("rectangle"):
                 double w = r.getW();
                 double h = r.getH();
-                shape = new rectangle(color, type, x1, y1, id, w, h);
+                shape = new rectangle(type, color, x1, y1, id, w, h);
                 break;
 
             case ("square"):
                 w = r.getW();
                 h = r.getH();
-                shape = new square(color, type, x1, y1, id, w, h);
+                shape = new square(type, color, x1, y1, id, w, h);
                 break;
         }
         array.set(getIndex(type, id), shape);
@@ -130,7 +133,7 @@ public class Server {
     @CrossOrigin(origins = "*")
     public void delete(@RequestBody request r) {
         int id = r.getId();
-        String type = r.getType();
+        String type = r.get();
         array.remove(getIndex(type, id));
         newFrame();
     }
@@ -194,27 +197,52 @@ public class Server {
         return test;
     }
 
-
     @PostMapping("/savejson")
     @CrossOrigin(origins = "*")
     public void saveJSON() throws IOException {
 
-        JSONArray jsonArray = new JSONArray(array);
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        Files.write(Paths.get("jsonfile.json"), jsonArray.toString().getBytes());
-
+        Gson GsonStr = new GsonBuilder().setPrettyPrinting().create();
+        String JsonStr = GsonStr.toJson(array);
+        Files.write(Paths.get("jsonfile.json"), JsonStr.toString().getBytes());
 
     }
 
     @PostMapping("/savexml")
     @CrossOrigin(origins = "*")
     public void saveXML() throws IOException {
-        JSONArray jsonArray = new JSONArray(array);
-        String xml = XML.toString(jsonArray, "shapes");
-        Files.write(Paths.get("xmlfile.xml"), xml.getBytes());
-        
+        XmlMapper xmlMapper = new XmlMapper();
+        PickAFile pick = new PickAFile();
+        File file = pick.getFile();
+        xmlMapper.writeValue(file, array);
+
     }
 
-    
+    @PostMapping("/loadxml")
+    @CrossOrigin(origins = "*")
+    public void loadXML() throws IOException {
+        File file = new File("xmlfile.xml");
+        XmlMapper xmlMapper = new XmlMapper();
+        ArrayList<Shape> arrayload = new ArrayList<Shape>(1000);
+        CollectionType listType = xmlMapper.getTypeFactory().constructCollectionType(ArrayList.class, Shape.class);
+        arrayload = xmlMapper.readValue(file, listType);
+        array = arrayload;
+    }
+
+    @PostMapping("/loadjson")
+    @CrossOrigin(origins = "*")
+    public void loadJSON() throws IOException {
+        deserializer deserializer = new deserializer("type");
+        deserializer.registerBarnType("line", line.class);
+        deserializer.registerBarnType("circle", Circle.class);
+        deserializer.registerBarnType("ellipse", ellipse.class);
+        deserializer.registerBarnType("rectangle", rectangle.class);
+        deserializer.registerBarnType("square", square.class);
+        deserializer.registerBarnType("triangle", triangle.class);
+        Gson gson = new GsonBuilder().registerTypeAdapter(Shape.class, deserializer).create();
+        String input = Files.readString(Paths.get("jsonfile.json"));
+        ArrayList<Shape> arrayload = gson.fromJson(input, new TypeToken<ArrayList<Shape>>() {
+        }.getType());
+        array = arrayload;
+    }
+
 }

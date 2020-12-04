@@ -11,9 +11,12 @@ public class Circle extends Shape{
 		this.r1 = r1;
 	}
 
-	public Circle(String color, String type, double x1, double y1, int id, double r1) {
-		super(color, type, x1, y1, id);
+	public Circle(String type, String color, double x1, double y1, int id, double r1) {
+		super(type, color, x1, y1, id);
 		this.r1 = r1;
+	}
+
+	public Circle() {
 	}
 
 }

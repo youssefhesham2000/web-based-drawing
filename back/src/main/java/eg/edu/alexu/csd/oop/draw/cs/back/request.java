@@ -5,11 +5,11 @@ public class request {
     double x1,x2,x3,y1,y2,y3,r1,r2,w,h;
     int id;
 
-    public String getType() {
+    public String get() {
         return type;
     }
 
-    public void setType(String type) {
+    public void set(String type) {
         this.type = type;
     }
 

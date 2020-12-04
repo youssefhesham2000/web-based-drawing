@@ -19,10 +19,13 @@ public class ellipse extends Shape{
         this.r2 = r2;
     }
 
-    public ellipse(String color, String type, double x1, double y1, int id, double r1, double r2) {
-        super(color, type, x1, y1, id);
+    public ellipse(String type, String color, double x1, double y1, int id, double r1, double r2) {
+        super(type, color, x1, y1, id);
         this.r1 = r1;
         this.r2 = r2;
+    }
+
+    public ellipse() {
     }
 
     

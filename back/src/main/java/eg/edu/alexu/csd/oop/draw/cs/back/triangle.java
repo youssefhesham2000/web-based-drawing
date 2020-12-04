@@ -35,13 +35,16 @@ public class triangle extends Shape{
         this.y3 = y3;
     }
 
-    public triangle(String color, String type, double x1, double y1, int id, double x2, double x3, double y2,
+    public triangle(String type, String color, double x1, double y1, int id, double x2, double x3, double y2,
             double y3) {
-        super(color, type, x1, y1, id);
+        super(type, color, x1, y1, id);
         this.x2 = x2;
         this.x3 = x3;
         this.y2 = y2;
         this.y3 = y3;
+    }
+
+    public triangle() {
     }
 
 }

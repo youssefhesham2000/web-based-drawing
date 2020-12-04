@@ -19,10 +19,13 @@ public class rectangle extends Shape{
         this.h = h;
     }
 
-    public rectangle(String color, String type, double x1, double y1, int id, double w, double h) {
-        super(color, type, x1, y1, id);
+    public rectangle(String type, String color, double x1, double y1, int id, double w, double h) {
+        super(type, color, x1, y1, id);
         this.w = w;
         this.h = h;
+    }
+
+    public rectangle() {
     }
 
     

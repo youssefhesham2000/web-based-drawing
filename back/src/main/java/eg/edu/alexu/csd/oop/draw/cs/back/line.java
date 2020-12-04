@@ -19,10 +19,13 @@ public class line extends Shape {
         this.y2 = y2;
     }
 
-    public line(String color, String type, double x1, double y1, int id, double x2, double y2) {
-        super(color, type, x1, y1, id);
+    public line(String type, String color, double x1, double y1, int id, double x2, double y2) {
+        super(type, color, x1, y1, id);
         this.x2 = x2;
         this.y2 = y2;
+    }
+
+    public line() {
     }
 
 }
